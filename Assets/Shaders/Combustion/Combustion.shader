@@ -6,6 +6,7 @@
 		_ConsumptionRate ("Consumption Rate", Float) = 0.01
 		_GrowthRate ("Growth Rate", Float) = 1.1
 		_BurnCapacity ("Burn Capacity", Float) = 2
+		_Diffusion ("Diffusion", Float) = 0.1
     }
      SubShader
      {
@@ -25,6 +26,7 @@
 			uniform float _GrowthRate;
 			uniform float _ConsumptionRate;
 			uniform float _BurnCapacity;
+			uniform float _Diffusion;
 
             float4 frag(v2f_customrendertexture IN) : COLOR
             {
@@ -35,15 +37,18 @@
 		
                 float4 c = tex2D(_SelfTexture2D, uv);
 				c.a = c.a * _GrowthRate * (1 + c.g * (_AccelFactor - 1))
-					+ tex2D(_SelfTexture2D, uv - duv.xy).a * 0.05
-					+ tex2D(_SelfTexture2D, uv - duv.wy).a * 0.10
-					+ tex2D(_SelfTexture2D, uv - duv.zy).a * 0.05
-					+ tex2D(_SelfTexture2D, uv + duv.zw).a * 0.10
-					+ tex2D(_SelfTexture2D, uv + duv.xw).a * 0.10
-					+ tex2D(_SelfTexture2D, uv + duv.zy).a * 0.05
-					+ tex2D(_SelfTexture2D, uv + duv.wy).a * 0.10
-					+ tex2D(_SelfTexture2D, uv + duv.xy).a * 0.05;
-				c.r -= c.a * _ConsumptionRate;
+					+ tex2D(_SelfTexture2D, uv - duv.xy).a * _Diffusion
+					+ tex2D(_SelfTexture2D, uv - duv.wy).a * _Diffusion
+					+ tex2D(_SelfTexture2D, uv - duv.zy).a * _Diffusion
+					+ tex2D(_SelfTexture2D, uv + duv.zw).a * _Diffusion
+					+ tex2D(_SelfTexture2D, uv + duv.xw).a * _Diffusion
+					+ tex2D(_SelfTexture2D, uv + duv.zy).a * _Diffusion
+					+ tex2D(_SelfTexture2D, uv + duv.wy).a * _Diffusion
+					+ tex2D(_SelfTexture2D, uv + duv.xy).a * _Diffusion;
+				if (c.a > 0)
+				{
+					c.r -= _ConsumptionRate;
+				}
 				c.a = clamp(c.a,0,_BurnCapacity * c.r);
 				return c;
             }
