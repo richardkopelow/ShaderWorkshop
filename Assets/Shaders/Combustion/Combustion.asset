@@ -31,7 +31,7 @@ CustomRenderTexture:
   m_InitSource: 0
   m_InitMaterial: {fileID: 0}
   m_InitColor: {r: 1, g: 1, b: 1, a: 1}
-  m_InitTexture: {fileID: 2800000, guid: 27f8ec10a87764395a1c0828bbe7f37b, type: 3}
+  m_InitTexture: {fileID: 1607806282, guid: 2c7f54f53ba624d4da880ad0244d9c1b, type: 3}
   m_UpdateMode: 2
   m_InitializationMode: 2
   m_UpdateZoneSpace: 0

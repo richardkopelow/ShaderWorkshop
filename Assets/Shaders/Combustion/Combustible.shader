@@ -2,7 +2,9 @@
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_BurnColor ("Burn Color", Color) = (1,0,0,1)
+		_HotColor ("Hot Color", Color) = (1,1,0,1)
+		_CoolColor ("Cool Color", Color) = (1,0,0,1)
+		_CharDarkness ("Char Darkness", Float) = 0.3
 		_FuelMap ("Fuel", 2D) = "black" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
@@ -28,7 +30,9 @@
 		half _Glossiness;
 		half _Metallic;
 		fixed4 _Color;
-		fixed4 _BurnColor;
+		fixed4 _HotColor;
+		fixed4 _CoolColor;
+		float _CharDarkness;
 
 		// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
 		// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -41,13 +45,21 @@
 			float4 fuel = tex2D (_FuelMap, IN.uv_MainTex);
 			float burn = fuel.a;
 
+			fixed4 burnCol = lerp(_CoolColor, _HotColor, burn);
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-			o.Albedo = lerp(c.rgb * fuel.r, _BurnColor, burn);
+			if (fuel.b == 0)
+			{
+				o.Albedo = lerp(c.rgb, burnCol, burn);
+			}
+			else
+			{
+				o.Albedo = lerp(c.rgb * (_CharDarkness + (1 - _CharDarkness) * fuel.r/fuel.b), burnCol, burn);
+			}
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
 			o.Alpha = c.a;
-			o.Emission = burn * _BurnColor;
+			o.Emission = burn * burnCol;
 		}
 		ENDCG
 	}

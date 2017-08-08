@@ -61,13 +61,13 @@ Material:
     m_Floats:
     - _AccelFactor: 2
     - _BumpScale: 1
-    - _BurnCapacity: 3
-    - _ConsumptionRate: 0.001
+    - _BurnCapacity: 1
+    - _ConsumptionRate: 0.005
     - _CoolFactor: 0.03
     - _CoolRate: 100
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _Diffusion: 0.03
+    - _Diffusion: 0.1
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
