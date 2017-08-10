@@ -2,14 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombustionOperator : MonoBehaviour {
-public CustomRenderTexture Texture;
+public class CombustionOperator : MonoBehaviour
+{
+    public CustomRenderTexture Texture;
+    public bool SimulateOffScreen;
 
-	void Start () {
-		Texture.Initialize();
-	}
-	
-	void Update () {
-		Texture.Update(5);
+    private bool onScreen;
+
+    void Start()
+    {
+        Texture.Initialize();
+    }
+
+    void Update()
+    {
+        if (onScreen || SimulateOffScreen)
+        {
+            Texture.Update(1);
+        }
+    }
+
+    void OnBecameVisible()
+    {
+		onScreen = true;
+    }
+
+	void OnBecameInvisible()
+	{
+		onScreen = false;
 	}
 }
